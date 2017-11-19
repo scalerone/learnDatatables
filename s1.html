@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+</head>
+<body>
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>手机号</th>
+        <th>邮箱</th>
+        <th>创建时间</th>
+        <th>登录ip</th>
+    </tr>
+    </thead>
+</table>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').dataTable({
+            "processing": true,
+            "serverSide": true,
+            "pageLength": 5,      //每页显示条数
+            "columns": [
+                {"data": "id"},
+                {"data": "username","searchable": false,name:"test"},
+                {"data": "mobile"},
+                {"data": 'email'},
+                {"data": 'create_time'},
+                {"data": 'last_login_ip'}
+            ],
+            "ajax": "../server/s1.php"
+        });
+    });
+
+
+</script>
+
+
+</body>
+</html>
