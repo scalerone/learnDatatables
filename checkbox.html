@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>checkbox</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+
+    <style type="text/css">
+
+    td.details-control {
+        background: url('../img/arrow_up.gif') no-repeat 52px 10px;
+        /*background: url('../img/details_open.png') no-repeat center center;*/
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../img/arrow_drop.gif') no-repeat 52px 10px;
+        /*background: url('../img/details_close.png') no-repeat center center;*/
+    }
+    th.ck{
+        text-align: center;
+    }
+
+    </style>
+
+</head>
+<body>
+<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+            <th></th>
+                 <th class="ck">
+                    <input type="checkbox" id="checkboxall" name="checkboxall">
+                                    </th>
+                                    <th>设备名称</th>
+                                    <th>设备IP</th>
+                                    <th>设备类型</th>
+                        <th>所属部门</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+            <th></th>
+                <th></th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Salary</th>
+            </tr>
+        </tfoot>
+</table>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    /* Formatting function for row details - modify as you need */
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.extn+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+ 
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+        "ajax": "../data/objects.txt",
+        "columns": [
+            {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": null },
+            { "data": "name" },
+            { "data": "position" },
+            { "data": "office" },
+            { "data": "salary" }
+        ],
+         "columnDefs": [
+                    {
+                        "targets": 1,
+                        "render": function(data, type, row){
+                            if (row['checked'] === true) {
+                                var checkbox = '<input type="checkbox" name="cellcheckbox" value="' + data + '" checked/>';
+                            } else {
+                                var checkbox = '<input type="checkbox" name="cellcheckbox" value="' + data + '"/>';
+                            }
+                            return checkbox;
+                        }
+                    }
+                ],
+        "ordering": false
+       
+    } );
+     
+    // Add event listener for opening and closing details
+    $('#example tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+} );
+
+
+</script>
+
+
+</body>
+</html>
